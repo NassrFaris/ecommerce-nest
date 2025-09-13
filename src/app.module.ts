@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './users/users.module';
-import { AppService } from './app.service';
 import { User } from './users/entities/user.entity';
 import { CategoryModule } from './category/category.module';
+import { ProductModule } from './product/product.module';
+import { Product } from './product/entities/product.entity';
+import { Category } from './category/entities/category.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -15,10 +17,11 @@ import { CategoryModule } from './category/category.module';
       database: 'ecommerceNest',
       autoLoadEntities: true,
       synchronize: true,
+      entities: [User,Category,Product],
     }),
     UserModule,
     CategoryModule,
+    ProductModule,
   ],
-
 })
 export class AppModule {}

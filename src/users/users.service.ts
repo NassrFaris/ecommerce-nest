@@ -9,6 +9,7 @@ import { User, UserRole } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -18,7 +19,7 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { name, email, password, role } = createUserDto;
     const existingUser = await this.userRepository.findOne({
-      where: { email },
+      where: { email:email },
     });
     if (existingUser) {
       throw new ConflictException('User with this email already exists');
@@ -28,20 +29,24 @@ export class UserService {
       name,
       email,
       password: hashedPassword,
-      role,
+      role:UserRole.COSTUMER,
     });
     return this.userRepository.save(user);
   }
   findAll() {
-    return 'there is all users'
+    return this.userRepository.find();
   }
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return this.userRepository.findOne({ where: { id } });
   }
   update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    const user=this.userRepository.findOne({where:{id}})
+    if(!user){
+      throw new NotFoundException('User not found')
+    }
+    return this.userRepository.update(id, updateUserDto);
     }
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.userRepository.delete(id);
   }
 }
