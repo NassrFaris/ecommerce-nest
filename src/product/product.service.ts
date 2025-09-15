@@ -17,7 +17,7 @@ export class ProductService {
 
   ) {}
 
-  async create(createProductDto: CreateProductDto): Promise<Product> {
+  async create(createProductDto: CreateProductDto,image?: Express.Multer.File): Promise<Product> {
     const { name, description, price, stock, category_id } = createProductDto;
 
 
@@ -32,6 +32,7 @@ export class ProductService {
       price,
       stock,
       category,
+      image:` uploads/products/${image ? image.filename:'' }`,
     });
 
     return this.productRepository.save(product);

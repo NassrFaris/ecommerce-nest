@@ -6,6 +6,7 @@ import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
 import { Product } from './product/entities/product.entity';
 import { Category } from './category/entities/category.entity';
+import { ProductImage } from './product/entities/product-images.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -17,8 +18,8 @@ import { Category } from './category/entities/category.entity';
       database: 'ecommerceNest',
       autoLoadEntities: true,
       synchronize: true,
-      entities: [User,Category,Product],
-      // dropSchema: true,
+      entities: [User,Category,Product,ProductImage],
+
     }),
     UserModule,
     CategoryModule,
