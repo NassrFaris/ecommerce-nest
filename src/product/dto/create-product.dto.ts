@@ -24,5 +24,5 @@ export class CreateProductDto {
   stock: number;
 
   @IsNumber()
-  categoryId: number;
+  category_id: number;
 }

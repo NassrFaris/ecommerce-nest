@@ -14,8 +14,8 @@ export class CategoryService {
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
   ) {}
-  async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
-    const { name } = createCategoryDto;
+  async create(createCategoryDto: CreateCategoryDto, Image?: Express.Multer.File): Promise<Category> {
+    const { name , description} = createCategoryDto;
     const existingCategory = await this.categoryRepository.findOne({
       where: { name: name },
     });
@@ -24,8 +24,8 @@ export class CategoryService {
     }
     const category = this.categoryRepository.create({
       name,
-      description: '',
-      image: '',
+      description,
+      image: `/uploads/categories/${Image? Image.filename:''}`,
     });
     return this.categoryRepository.save(category);
   }

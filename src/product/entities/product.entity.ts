@@ -34,11 +34,12 @@ export class Product {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Category, (category) => category.products)
+  @Column()
+  category_id: number;
+  
+  @ManyToOne(() => Category, (category) => category.products,{eager:true})
   @JoinColumn({ name: 'category_id' })
-  category: Category|null;
+  category: Category;
 
-  @Column({ nullable: true })
-  category_id?: number;
 }
 

@@ -5,6 +5,7 @@ import { Product } from './entities/product.entity';
 import { Category } from 'src/category/entities/category.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { CategoryService } from 'src/category/category.service';
 
 @Injectable()
 export class ProductService {
@@ -12,23 +13,17 @@ export class ProductService {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
 
-    @InjectRepository(Category)
-    private readonly categoryRepository: Repository<Category>,
+    private readonly categoryService: CategoryService,
+
   ) {}
 
-
   async create(createProductDto: CreateProductDto): Promise<Product> {
-    const { name, description, price, stock, categoryId } = createProductDto;
-
-    const existingProduct = await this.productRepository.findOne({ where: { name } });
-    if (existingProduct) {
-      throw new ConflictException('Product with this name already exists');
-    }
+    const { name, description, price, stock, category_id } = createProductDto;
 
 
-    const category = await this.categoryRepository.findOne({ where: { id: categoryId } });
+    const category = await this.categoryService.findOne(category_id);
     if (!category) {
-      throw new NotFoundException(`Category with ID ${categoryId} not found`);
+      throw new NotFoundException(`Category with ID ${category_id} not found`);
     }
 
     const product = this.productRepository.create({
@@ -53,6 +48,7 @@ export class ProductService {
       where: { id },
       relations: ['category'],
     });
+    
     if (!product) {
       throw new NotFoundException('Product not found');
     }

@@ -18,6 +18,7 @@ import { Category } from './category/entities/category.entity';
       autoLoadEntities: true,
       synchronize: true,
       entities: [User,Category,Product],
+      // dropSchema: true,
     }),
     UserModule,
     CategoryModule,
