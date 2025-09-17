@@ -19,7 +19,7 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { name, email, password, role } = createUserDto;
     const existingUser = await this.userRepository.findOne({
-      where: { email:email },
+      where: { email: email },
     });
     if (existingUser) {
       throw new ConflictException('User with this email already exists');
@@ -29,23 +29,41 @@ export class UserService {
       name,
       email,
       password: hashedPassword,
-      role:UserRole.COSTUMER,
+      role: role || UserRole.COSTUMER,
     });
     return this.userRepository.save(user);
   }
+  
   findAll() {
     return this.userRepository.find();
   }
-  findOne(id: number) {
-    return this.userRepository.findOne({ where: { id } });
+  // Add these methods to your existing UsersService
+
+  async findById(id: number): Promise<User | null> {
+    return await this.userRepository.findOne({ where: { id } });
   }
+
+  async findByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.findOne({ where: { email } });
+  }
+
   update(id: number, updateUserDto: UpdateUserDto) {
-    const user=this.userRepository.findOne({where:{id}})
-    if(!user){
-      throw new NotFoundException('User not found')
+    const user = this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
     }
     return this.userRepository.update(id, updateUserDto);
+  }
+
+  async updatePassword(id: number, password: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new Error('User not found!');
     }
+    user.password = password;
+    return this.userRepository.save(user);
+  }
+
   remove(id: number) {
     return this.userRepository.delete(id);
   }

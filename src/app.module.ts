@@ -7,6 +7,7 @@ import { ProductModule } from './product/product.module';
 import { Product } from './product/entities/product.entity';
 import { Category } from './category/entities/category.entity';
 import { ProductImage } from './product/entities/product-images.entity';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -24,6 +25,7 @@ import { ProductImage } from './product/entities/product-images.entity';
     UserModule,
     CategoryModule,
     ProductModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
